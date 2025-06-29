@@ -2,6 +2,7 @@ package chess
 
 import (
 	"log"
+	"math"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -96,8 +97,15 @@ func (b *Board) DrawPieceScale(x, y, scaleX, scaleY float64, screen, img *ebiten
 
 // LegalMove 判断当前走法是否合理
 func (b *Board) LegalMove(startX, startY, endX, endY int) bool {
-	// todo
-	return true
+	// end没子
+	if b.GetPiece(endX, endY) == 0 {
+		if startX == endX && math.Abs(float64(startY-endY)) == 1 {
+			return true
+		} else if startY == endY && math.Abs(float64(startX-endX)) == 1 {
+			return true
+		}
+	}
+	return false
 }
 
 // Move 执行走法
@@ -105,14 +113,12 @@ func (b *Board) Move(startX, startY, endX, endY int) {
 	startPieceV := b.GetPiece(startX, startY)
 	b.DelPiece(startX, startY)
 	b.AddPiece(endX, endY, startPieceV)
-	// b.ChangePlayer()
 }
 
 // Eat 吃子
-func (b *Board) Eat(xPos, yPos, player int) {
-	b.CheckRowCanEat(xPos, yPos, player)
-	b.CheckColumnCanEat(xPos, yPos, player)
-	b.ChangePlayer()
+func (b *Board) Eat(xPos, yPos int) {
+	b.CheckRowCanEat(xPos, yPos, b.player)
+	b.CheckColumnCanEat(xPos, yPos, b.player)
 }
 
 // CheckRowCanEat 检查行是否能吃子
@@ -181,7 +187,19 @@ LOOP:
 
 // IsOver 游戏是否结束
 func (b *Board) IsOver() bool {
-	// todo
+	whiteNum, blackNum := 0, 0
+	for y := range b.piecePos {
+		for x := range b.piecePos[y] {
+			if b.GetPiece(x, y) == 1 {
+				whiteNum++
+			} else if b.GetPiece(x, y) == 2 {
+				blackNum++
+			}
+		}
+	}
+	if whiteNum == 1 || blackNum == 1 {
+		return true
+	}
 	return false
 }
 
