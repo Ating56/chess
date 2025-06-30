@@ -6,6 +6,7 @@ If one side only has one chess piece left, they lose the game.
 
 For example, in this case, white characters can eat black spots:
 ![image](/image/example1.png)
+
 But this situation cannot:
 ![image](/image/example2.png)
 
