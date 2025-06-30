@@ -4,10 +4,12 @@ A 3x3 grid with four pieces from both sides, with two pieces from our side place
 Each chess piece can only take one step up, down, left, and right.
 If one side only has one chess piece left, they lose the game.
 
-For example, in this case, white characters can eat black spots:
+> For example, in this case, white characters can eat black spots:
+
 ![image](/image/example1.png)
 
-But this situation cannot:
+> But this situation cannot:
+
 ![image](/image/example2.png)
 
 Some commands:
