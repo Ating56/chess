@@ -1,8 +1,14 @@
 package chess
 
 import (
+	"bytes"
+	"chess/fonts"
+	"image/color"
+	"log"
+
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"github.com/hajimehoshi/ebiten/v2/text/v2"
 )
 
 type Game struct {
@@ -31,6 +37,7 @@ func (g *Game) Update() error {
 			g.board.piecePos = PieceStartPos
 			g.board.player = 1
 			g.gameOver = false
+			g.text = ""
 		}
 		x, y := ebiten.CursorPosition()
 		xPos := (x - Edge) / SquareSize / 2
@@ -81,12 +88,20 @@ func (g *Game) ClickSquare(xPos, yPos int) {
 }
 
 func (g *Game) DrawText(screen *ebiten.Image) {
-	// todo
-	// textOp := &text.DrawOptions{}
-	// textOp.GeoM.Translate(ScreenWidth/2, ScreenHeight/2)
-	// textOp.PrimaryAlign = text.AlignCenter
-	// textOp.SecondaryAlign = text.AlignCenter
-	// text.Draw(screen, g.text, &text.GoTextFace{
-	// 	Size: 40,
-	// }, textOp)
+	// 字体
+	s, err := text.NewGoTextFaceSource(bytes.NewReader(fonts.Simkai_ttf))
+	if err != nil {
+		log.Fatal(err)
+	}
+	mplusFaceSource := s
+
+	textOp := &text.DrawOptions{}
+	textOp.GeoM.Translate(ScreenWidth/2, ScreenHeight/2)
+	textOp.ColorScale.ScaleWithColor(color.RGBA{255, 0, 0, 0xff})
+	textOp.PrimaryAlign = text.AlignCenter
+	textOp.SecondaryAlign = text.AlignCenter
+	text.Draw(screen, g.text, &text.GoTextFace{
+		Source: mplusFaceSource,
+		Size:   40,
+	}, textOp)
 }
